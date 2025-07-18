@@ -1,0 +1,17 @@
+wb = xlsx_package.workbook
+
+wb.add_worksheet(name: "Catalogo Libri") do |sheet|
+  sheet.add_row ["Titolo", "Autore", "Editore", "Genere", "Anno", "ISBN", "borrowed"]
+
+  @books.each do |book|
+    sheet.add_row [
+      book.title,
+      book.author,
+      book.publisher,
+      book.genre,
+      book.publication_year,
+      book.isbn,
+      book.borrowed ? "Sì" : "No"
+    ]
+  end
+end

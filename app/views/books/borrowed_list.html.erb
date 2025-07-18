@@ -1,0 +1,43 @@
+<div class="container">
+  <h4 class="teal-text text-darken-4">
+    📦 Libri in Prestito
+  </h4>
+
+  <table class="responsive-table centered">
+    <thead>
+      <tr class="teal lighten-4">
+        <th>Titolo</th>
+        <th>Autore</th>
+        <th>Lettore</th>
+        <th>Telefono</th>
+        <th>Restituire entro</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @borrowed_books.each do |book| %>
+        <% row_class =
+            if book.due_date.present? && book.due_date < Date.today
+              'overdue'
+            elsif book.due_date.present? && book.due_date <= Date.today + 3.days
+              'due-soon'
+            else
+              ''
+            end %>
+        <tr class="<%= row_class %>">
+          <td><%= book.title %></td>
+          <td><%= book.author %></td>
+          <td><%= book.borrower&.full_name || '-' %></td>
+          <td><%= book.borrower&.phone || '-' %></td>
+          <td><%= book.due_date.present? ? book.due_date.strftime('%d/%m/%Y') : '-' %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div class="section" style="margin-top: 20px;">
+    <%= link_to "🔙 Torna al Catalogo", books_path, class: "btn grey darken-1" %>
+  </div>
+</div>
+
+
+

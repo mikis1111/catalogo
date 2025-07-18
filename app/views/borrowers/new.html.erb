@@ -1,0 +1,45 @@
+<div class="container" style="max-width: 600px; margin-top: 40px;">
+  <div class="card white z-depth-1" style="padding: 30px; border-radius: 16px;">
+    <h5 class="center-align teal-text text-darken-4">👤 Aggiungi Lettore</h5>
+
+    <% if @borrower.errors.any? %>
+      <div class="card-panel red lighten-4">
+        <h6><strong>⚠️ Attenzione:</strong></h6>
+        <ul>
+          <% @borrower.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <%= form_with(model: @borrower, url: borrowers_path, local: true) do |form| %>
+      <%= hidden_field_tag :return_to_book_id, @return_to_book_id %>
+
+      <div class="input-field">
+        <%= form.text_field :first_name, placeholder: "Nome", class: "validate" %>
+        <label for="borrower_first_name">Nome</label>
+      </div>
+
+      <div class="input-field">
+        <%= form.text_field :last_name, placeholder: "Cognome", class: "validate" %>
+        <label for="borrower_last_name">Cognome</label>
+      </div>
+
+      <div class="input-field">
+        <%= form.telephone_field :phone, placeholder: "Telefono", class: "validate" %>
+        <label for="borrower_phone">Telefono</label>
+      </div>
+
+      <div class="row" style="margin-top: 30px;">
+        <div class="col s6">
+          <%= form.submit "Salva", class: "btn green", style: "width: 100%;" %>
+        </div>
+        <div class="col s6">
+          <%= link_to "Annulla", books_path, class: "btn grey", style: "width: 100%;" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+

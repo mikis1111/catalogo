@@ -1,0 +1,95 @@
+<%= form_with(model: book, local: true) do |form| %>
+  <div class="card white z-depth-1" style="padding: 30px; border-radius: 16px; max-width: 600px; margin: 0 auto;">
+    <h5 class="center-align teal-text text-darken-4" style="margin-bottom: 30px;">
+      📝 <%= book.new_record? ? 'Aggiungi un Nuovo Libro' : 'Modifica Libro' %>
+    </h5>
+
+    <% if book.errors.any? %>
+      <div class="card-panel red lighten-4">
+        <h6><strong>⚠️ Attenzione:</strong></h6>
+        <ul>
+          <% book.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <!-- Campi del libro -->
+    <div class="input-field">
+      <%= form.text_field :title, placeholder: "Titolo", class: "validate" %>
+      <label for="book_title">Titolo</label>
+    </div>
+
+    <div class="input-field">
+      <%= form.text_field :author, placeholder: "Autore", class: "validate" %>
+      <label for="book_author">Autore</label>
+    </div>
+
+    <div class="input-field">
+      <%= form.text_field :publisher, placeholder: "Editore", class: "validate" %>
+      <label for="book_publisher">Editore</label>
+    </div>
+
+    <div class="input-field">
+      <%= form.text_field :genre, placeholder: "Genere", class: "validate" %>
+      <label for="book_genre">Genere</label>
+    </div>
+
+    <div class="input-field">
+      <%= form.number_field :publication_year, placeholder: "Anno di pubblicazione", class: "validate" %>
+      <label for="book_publication_year">Anno di pubblicazione</label>
+    </div>
+
+    <div class="input-field">
+      <%= form.text_field :isbn, placeholder: "ISBN", class: "validate" %>
+      <label for="book_isbn">ISBN</label>
+    </div>
+
+    <!-- Checkbox prestito -->
+    <div class="input-field" style="margin-top: 30px;">
+      <p>
+        <label>
+          <%= form.hidden_field :borrowed, value: false %>
+          <%= form.check_box :borrowed, id: "book_borrowed" %>
+          <span>📦 Libro prestato</span>
+        </label>
+      </p>
+    </div>
+
+    <!-- Campi lettore -->
+    <div id="borrower-fields" style="<%= book.borrowed ? '' : 'display: none;' %>">
+      <div class="input-field" style="margin-top: 30px;">
+        <input type="text" name="borrower[first_name]" id="borrower_first_name" placeholder="Nome" class="validate">
+        <label for="borrower_first_name">Nome del lettore</label>
+      </div>
+
+      <div class="input-field">
+        <input type="text" name="borrower[last_name]" id="borrower_last_name" placeholder="Cognome" class="validate">
+        <label for="borrower_last_name">Cognome del lettore</label>
+      </div>
+
+      <div class="input-field">
+        <input type="text" name="borrower[phone]" id="borrower_phone" placeholder="Telefono" class="validate">
+        <label for="borrower_phone">Telefono</label>
+      </div>
+
+      <div class="input-field" style="margin-top: 30px;">
+        <%= form.label :due_date, "🗓️ Data di restituzione prevista" %>
+        <%= form.date_field :due_date, class: "datepicker", placeholder: "gg/mm/aaaa", style: "margin-top: 10px;" %>
+      </div>
+    </div>
+
+    <!-- Pulsanti -->
+    <div class="row" style="margin-top: 30px;">
+      <div class="col s6">
+        <%= form.submit "Salva", class: "btn green", style: "width: 100%;" %>
+      </div>
+      <div class="col s6">
+        <%= link_to "Annulla", books_path, class: "btn grey", style: "width: 100%;" %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+

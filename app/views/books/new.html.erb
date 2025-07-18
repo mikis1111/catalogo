@@ -1,0 +1,64 @@
+<div class="container" style="max-width: 800px; margin-top: 40px; margin-bottom: 40px;">
+  <div class="card white" style="padding: 30px; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
+    <h5 class="center-align" style="color: #00695c; margin-bottom: 30px;">
+      ✏️ <strong>Aggiungi un Nuovo Libro</strong>
+    </h5>
+
+    <%= form_with model: @book, local: true, html: { class: "row" } do |f| %>
+      <!-- Titolo -->
+      <div class="input-field col s12">
+        <%= f.text_field :title, class: "validate" %>
+        <%= f.label :title, "Titolo" %>
+      </div>
+
+      <!-- Autore -->
+      <div class="input-field col s12">
+        <%= f.text_field :author, class: "validate" %>
+        <%= f.label :author, "Autore" %>
+      </div>
+
+      <!-- Editore -->
+      <div class="input-field col s12">
+        <%= f.text_field :publisher, class: "validate" %>
+        <%= f.label :publisher, "Editore" %>
+      </div>
+
+      <!-- Genere -->
+      <div class="input-field col s12">
+        <%= f.text_field :genre, class: "validate" %>
+        <%= f.label :genre, "Genere" %>
+      </div>
+
+      <!-- Anno di pubblicazione -->
+      <div class="input-field col s12">
+        <%= f.number_field :publication_year, min: 0, class: "validate" %>
+        <%= f.label :publication_year, "Anno di pubblicazione" %>
+      </div>
+
+      <!-- ISBN -->
+      <div class="input-field col s12">
+        <%= f.text_field :isbn, class: "validate" %>
+        <%= f.label :isbn, "ISBN" %>
+      </div>
+
+      <!-- borrowed -->
+      <div class="col s12" style="margin-bottom: 60px;">
+        <label>
+          <%= f.check_box :borrowed, class: "filled-in" %>
+          <span>Libro borrowed</span>
+        </label>
+      </div>
+
+      <!-- Pulsanti -->
+      <div class="row" style="margin-top: 20px;">
+        <div class="col s12 m6" style="padding-right: 5px;">
+          <%= f.submit "SALVA", class: "btn green darken-1 btn-block", style: "height: auto; padding: 0 8px;" %>
+        </div>
+        <div class="col s12 m6" style="padding-left: 5px;">
+          <%= link_to "ANNULLA", books_path, class: "btn grey darken-1 btn-block", style: "height: auto; padding: 0 8px;" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+

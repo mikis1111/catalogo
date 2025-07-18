@@ -1,0 +1,172 @@
+<div class="row center-align" style="margin-bottom: 10px;">
+  <h4 class="center-align teal-text text-darken-4">📚 Catalogo Libri</h4>
+
+  <!-- Pulsanti in alto -->
+  <% if current_user.admin? %>
+  <div class="sticky-controls">
+    <div class="row center-align" style="margin-bottom: 20px;">
+      <div class="col s12 m3">
+        <%= link_to borrowed_list_books_path, class: 'btn orange', style: "width: 100%;" do %>
+          <span class="animated-icon">📘</span> Libri in Prestito
+        <% end %>
+      </div>
+      <div class="col s12 m3">
+        <%= link_to new_book_path, class: 'btn green', style: "width: 100%;" do %>
+          <span class="animated-icon">➕</span> Aggiungi Libro
+        <% end %>
+      </div>
+      <div class="col s12 m3">
+        <%= link_to export_excel_books_path(format: :xlsx, query: params[:query], borrowed: params[:borrowed]), class: "btn blue lighten-1 white-text", style: "width: 100%;" do %>
+          <span class="animated-icon">📄</span> Esporta Excel
+        <% end %>
+      </div>
+      <div class="col s12 m3">
+        <%= link_to export_pdf_books_path(format: :pdf, query: params[:query], borrowed: params[:borrowed]), class: "btn red", style: "width: 100%;" do %>
+          <span class="animated-icon">📄</span> Esporta PDF
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <% end %>
+
+  <!-- Barra di ricerca e filtro borrowed -->
+  <!-- 🔍 Barra di ricerca -->
+  <div class="row">
+    <%= form_with url: books_path, method: :get, local: true do %>
+      <div class="col s12 m8 l9 input-field">
+        <i class="material-icons prefix">search</i>
+        <%= text_field_tag :query, params[:query], class: "validate", placeholder: "Cerca per titolo, autore, editore, genere o anno", style: "margin-left: 40px;" %>
+      </div>
+
+      <div class="col s12 m4 l3">
+        <div class="row" style="margin-bottom: 0;">
+          <div class="col s12">
+            <label>
+              <%= check_box_tag :borrowed, "1", params[:borrowed].present?, class: "filled-in" %>
+              <span>📚 Solo libri prestati</span>
+            </label>
+          </div>
+
+          <div class="col s6" style="margin-top: 10px;">
+            <%= submit_tag "🔎 Cerca", class: "btn blue", style: "width: 100%;" %>
+          </div>
+
+          <div class="col s6" style="margin-top: 10px;">
+            <%= link_to "🔁 Reset", books_path, class: "btn grey darken-1", style: "width: 100%;" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <% if current_user.admin? %>
+  <!-- Importazione Excel con pulsante allineato -->
+  <div class="row valign-wrapper" style="margin-bottom: 20px;">
+    <%= form_with url: import_books_path, local: true, html: { multipart: true, class: "col s12 m12 l12" } do %>
+      <div class="input-field col s12 m8 l8">
+        <div class="file-field input-field" style="margin: 0;">
+          <div class="btn green">
+            <span>📁 Importa Excel</span>
+            <%= file_field_tag :file %>
+          </div>
+          <div class="file-path-wrapper">
+            <input class="file-path validate" type="text" placeholder="Seleziona file Excel">
+          </div>
+        </div>
+      </div>
+      <div class="input-field col s12 m4 l4 center-align">
+        <%= submit_tag "Carica", class: "btn blue", style: "margin-top: 10px;" %>
+      </div>
+    <% end %>
+  </div>
+  <% end %>
+</div>
+
+<!-- Tabella libri -->
+<div class="card white" style="padding: 25px; border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.1); overflow-x: auto; max-width: 95%; margin: 0 auto;">
+  <table class="highlight responsive-table centered">
+    <thead class="teal lighten-5">
+      <tr>
+        <th>Titolo</th>
+        <th>Autore</th>
+        <th>Editore</th>
+        <th>Genere</th>
+        <th>Anno</th>
+        <th>ISBN</th>
+        <th>borrowed</th>
+        <th>Lettore</th>
+        <th>Azioni</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @books.each do |book| %>
+        <tr>
+          <td><%= book.title %></td>
+          <td><%= book.author %></td>
+          <td><%= book.publisher %></td>
+          <td><%= book.genre %></td>
+          <td><%= book.publication_year %></td>
+          <td><%= book.isbn %></td>
+          <td>
+            <% if book.borrowed %>
+              <span class="green-text">✅</span>
+            <% else %>
+              <span class="red-text">❌</span>
+            <% end %>
+          </td>
+          <td>
+            <% if book.borrower.present? %>
+              <strong><%= book.borrower.first_name %> <%= book.borrower.last_name %></strong><br>
+              <small>📞 <%= book.borrower.phone %></small>
+            <% else %>
+              -
+            <% end %>
+          </td>
+          <td>
+            <% if current_user.admin? %>
+            <div style="display: flex; gap: 6px; justify-content: center;">
+              <%= link_to book_path(book), class: "btn-floating btn-small blue tooltipped", data: { position: "top", tooltip: "Visualizza" } do %>
+                <i class="material-icons">visibility</i>
+              <% end %>
+
+              <%= link_to edit_book_path(book), class: "btn-floating btn-small orange tooltipped", data: { position: "top", tooltip: "Modifica" } do %>
+                <i class="material-icons">edit</i>
+              <% end %>
+
+              <%= button_to book_path(book), method: :delete, data: { confirm: "Sei sicuro?" }, form: { style: 'display:inline' }, class: "btn-floating btn-small red tooltipped" do %>
+                <i class="material-icons">delete</i>
+              <% end %>
+            </div>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<!-- Pulsante Torna su -->
+<a id="back-to-top" class="btn-floating btn-large teal tooltipped"
+   data-position="left" data-tooltip="Torna su"
+   style="position: fixed; bottom: 40px; right: 30px; display: none; z-index: 999;">
+  <i class="material-icons">arrow_upward</i>
+</a>
+
+<!-- Script scroll to top -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const backToTop = document.getElementById("back-to-top");
+    if (backToTop) {
+      window.addEventListener("scroll", () => {
+        backToTop.style.display = window.scrollY > 200 ? "block" : "none";
+      });
+      backToTop.addEventListener("click", function (e) {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+  });
+</script>
+
+
+

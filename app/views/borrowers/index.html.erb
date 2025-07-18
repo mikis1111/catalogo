@@ -1,0 +1,7 @@
+<h3>📋 Elenco Lettori</h3>
+
+<ul>
+  <% @borrowers.each do |b| %>
+    <li><%= b.full_name %> - <%= b.phone %></li>
+  <% end %>
+</ul>

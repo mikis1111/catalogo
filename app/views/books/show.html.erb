@@ -1,0 +1,62 @@
+<div class="container book-show-card z-depth-2">
+  <h4 class="center-align teal-text text-darken-4">
+    📖 <strong><%= @book.title %></strong>
+  </h4>
+
+  <div class="row">
+    <!-- Colonna sinistra: Info libro -->
+    <div class="col s12 m6">
+      <ul class="collection">
+        <li class="collection-item"><strong>✍️ Autore:</strong> <%= @book.author %></li>
+        <li class="collection-item"><strong>🏢 Editore:</strong> <%= @book.publisher %></li>
+        <li class="collection-item"><strong>📚 Genere:</strong> <%= @book.genre %></li>
+        <li class="collection-item"><strong>📅 Anno:</strong> <%= @book.publication_year %></li>
+        <li class="collection-item"><strong>🔢 ISBN:</strong> <%= @book.isbn %></li>
+      </ul>
+    </div>
+
+    <!-- Colonna destra: Info prestito -->
+    <div class="col s12 m6">
+      <ul class="collection">
+        <li class="collection-item">
+          <strong>📦 Prestato:</strong>
+          <% if @book.borrowed %>
+            <span class="green-text">✅</span>
+          <% else %>
+            <span class="red-text">❌</span>
+          <% end %>
+        </li>
+
+        <% if @book.borrower.present? %>
+          <li class="collection-item">
+            <strong>👤 Lettore:</strong> <%= @book.borrower.full_name %>
+          </li>
+          <li class="collection-item">
+            <strong>📞 Telefono:</strong> <%= @book.borrower.phone %>
+          </li>
+        <% end %>
+
+        <% if @book.due_date.present? %>
+  <li class="collection-item">
+    <strong>⏰ Restituire entro:</strong>
+    <span class="<%= @book.due_date < Date.today ? 'red-text' : 'green-text' %>">
+      <%= @book.due_date.strftime('%d/%m/%Y') %>
+    </span>
+    (<%= distance_of_time_in_words(Date.today, @book.due_date) %> rimanenti)
+  </li>
+<% end %>
+
+      </ul>
+    </div>
+  </div>
+
+  <!-- Pulsanti -->
+  <div class="row center-align" style="margin-top: 20px;">
+    <%= link_to "✏️ Modifica", edit_book_path(@book), class: "btn orange" %>
+    <%= link_to "⏪ Torna all'elenco", books_path, class: "btn grey darken-1" %>
+  </div>
+</div>
+
+
+
+
